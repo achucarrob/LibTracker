@@ -10,6 +10,12 @@ import { routerApi } from './routes/index.js'
 import { pool } from './services/db_connect.js';
 
 // Rutas
+app.get('/libros/:id', (req, res) => {
+    // Forma limpia de guardar un parametro con ESC6, "de todos los parametros que pueda recibir solo me interesa el id"
+    const { id } = req.params;
+    res.send('lista de libros')
+});
+
 app.post('/create', (req,res) => {
     res.send('Agregar un libro a la lista')
 });
@@ -33,9 +39,9 @@ app.listen(port, () => {
     pool.connect(
         (err , client , done) => {
             if (err) {
-                console.log('Por ahi no es reina :/ ')
+                console.log('No conecta a la db check /services/db_conect.js')
             } else {
-                console.log('El poder de Grimes esta contigo')
+                console.log('Coneccion a la base de datos succesfull')
                 done()};
         });
     console.log(`Example app listening on port ${port}`)
