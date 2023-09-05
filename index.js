@@ -9,11 +9,26 @@ import { routerApi } from './routes/index.js'
 
 import { pool } from './services/db_connect.js';
 
-// Rutas
+// Rutas (Los endpoints se nombran en plural por Buena Practica)
+// app.get('/libros', (req, res) => {
 app.get('/libros/:id', (req, res) => {
-    // Forma limpia de guardar un parametro con ESC6, "de todos los parametros que pueda recibir solo me interesa el id"
-    const { id } = req.params;
-    res.send('lista de libros')
+    // Forma limpia de guardar un parametro con ECS6, "de todos los parametros que pueda recibir solo me interesa el id"
+    const { id } = req.query;
+
+    if (id) {
+        pool.query('SELECT * FROM public.books WHERE id= $1', [id] , (err, result) => {
+            res.json(result.rows)
+        });
+    } else {
+        res.send('No se encuentra libros con este indicador')
+        // pool.query('SELECT * FROM public.books', (err, result) => {
+        //     res.json(result.rows)
+        // });
+    };
+
+    // pool.query('SELECT * FROM public.books WHERE id= $1', [id] , (err, result) => {
+    //     res.json(result.rows)
+    // });
 });
 
 app.post('/create', (req,res) => {
