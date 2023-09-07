@@ -24,6 +24,19 @@ app.post('/create', (req,res) => {
     });
 });
 
+app.delete('/delete/:id', (req,res) => {
+    const { id } = req.params;
+
+    // if (id) {
+        pool.query('DELETE FROM public.books WHERE id = $1 RETURNING *',
+        [id],
+        (err, result) => {
+            res.json(result.rows)
+        // });
+    // } else {
+        // res.send('Aqui no hay nada que ver muchachos')
+    });
+});
 app.patch('/patch/:id', (req, res) => {
     const id = req.params.id
     // const boolean = req.params.boolean
@@ -33,9 +46,6 @@ app.patch('/patch/:id', (req, res) => {
     });
 });
 
-app.delete('/delete', (req,res) => {
-    res.send('Borrar una wea')
-});
 
 
 routerApi(app);
