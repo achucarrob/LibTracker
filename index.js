@@ -9,34 +9,19 @@ import { routerApi } from './routes/index.js'
 
 import { pool } from './services/db_connect.js';
 
+// Le decimos a app que espere formatos tipo json
+app.use(express.json())
+
 // Rutas (Los endpoints se nombran en plural por Buena Practica)
-// app.get('/libros', (req, res) => {
-app.get('/libros/:id', (req, res) => {
-    // Forma limpia de guardar un parametro con ECS6, "de todos los parametros que pueda recibir solo me interesa el id"
-    const { id } = req.query;
-
-    if (id) {
-        pool.query('SELECT * FROM public.books WHERE id= $1', [id] , (err, result) => {
-            res.json(result.rows)
-        });
-    } else {
-        res.send('No se encuentra libros con este indicador')
-        // pool.query('SELECT * FROM public.books', (err, result) => {
-        //     res.json(result.rows)
-        // });
-    };
-
-    // pool.query('SELECT * FROM public.books WHERE id= $1', [id] , (err, result) => {
-    //     res.json(result.rows)
-    // });
-});
-
 app.post('/create', (req,res) => {
-    res.send('Agregar un libro a la lista')
-});
-
-app.delete('/delete', (req,res) => {
-    res.send('Borrar una wea')
+    // Request del cuerpo de Insomnia (Emulador de frontend)
+    const body = req.body;
+    // Query = Insertar a la tabla books titulo, paginas y va estar relacionado a un user (FK) los valores se le pasa entre corchetes y que retorne todo de books
+    pool.query('INSERT INTO public.books (title, cant_pgs, user_id) VALUES ($1, $2, $3) RETURNING *',
+    [body.title, body.cant_pgs, body.user_id],
+    (err, result) => {  
+        res.json(result.rows)
+    });
 });
 
 app.patch('/patch/:id', (req, res) => {
@@ -47,6 +32,11 @@ app.patch('/patch/:id', (req, res) => {
         res.json(result.rows)
     });
 });
+
+app.delete('/delete', (req,res) => {
+    res.send('Borrar una wea')
+});
+
 
 routerApi(app);
 
@@ -60,5 +50,5 @@ app.listen(port, () => {
                 done()};
         });
     console.log(`Example app listening on port ${port}`)
-    console.log(`Run the server at http://127.0.0.1:${port}/`)
+    console.log(`Run the server at http://localhost:${port}/`)
 });
