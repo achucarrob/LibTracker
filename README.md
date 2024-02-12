@@ -13,10 +13,6 @@ Sigue estos pasos para ejecutar el proyecto en tu entorno local:
 1. **Clonar el proyecto:**
    Clona este repositorio en tu IDE o máquina local.
 
-   ```bash
-   git clone https://github.com/tu-usuario/LibTracker.git
-   ```
-
 2. **Instalar dependencias:**
    Navega al directorio del proyecto y ejecuta el siguiente comando para instalar las dependencias necesarias.
 
